@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as CONSTANTS from "../constants";
+import { Link } from "react-router-dom";
 
 function Users() {
     const [userData, setUserData] = useState([]);
@@ -44,6 +45,10 @@ function Users() {
         <div className="container">
 
             <div className="container-fluid">
+                <Link to="/">Home</Link>
+                &nbsp;|&nbsp;
+                <Link to="/invoice">Invoice</Link>
+                <br />
 
                 <h1 className="h3 mb-2 text-gray-800">{CONSTANTS.BOT_NAME}</h1>
                 <p className="mb-4">Send a message to <strong>{CONSTANTS.BOT_NAME}</strong> on telegram</p>

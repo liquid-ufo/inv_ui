@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from "react-hook-form";
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 import * as CONSTANTS from "../constants";
+import { Link } from "react-router-dom";
 
 // Create styles
 const styles = StyleSheet.create({
@@ -37,7 +38,47 @@ const CLIENT_NAMES = [
     { id: 11, name: "Kharadi" },
 ];
 
+
 function Invoice() {
+
+    const [userData, setUserData] = useState([]);
+
+    useEffect(() => {
+        // console.log("userData", userData);
+
+        const url = CONSTANTS.API_BASE_URL + "/api/testpdf/getUpdates";
+        setInterval(() => {
+
+            fetch(url, {
+                method: "GET",
+                mode: 'cors', // no-cors, *cors, same-origin
+                cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+                credentials: 'same-origin', // include, *same-origin, omit
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(data => data.json())
+                .then(data => {
+                    console.log("data:", data);
+                    if (data && typeof data === "object") {
+                        const parsedData = [];
+                        Object.keys(data).forEach(key => {
+                            const obj = {};
+                            obj.chatId = key;
+                            obj.name = data[key];
+                            parsedData.push(
+                                <option key={key} value={key}>{obj.name}</option>
+                            )
+                        });
+                        setUserData(parsedData);
+                    }
+                }).catch(error => {
+                    console.log("error:", error);
+                });
+        }, 10000);
+
+    }, []);
+
 
     const parentCompanyOptions = PARENT_COMPANIES.map((option) => (
         <option key={option.id} value={option.name}>{option.name}</option>
@@ -108,7 +149,9 @@ function Invoice() {
 
     return (
         <div className="container">
-
+            <Link to="/">Home</Link>
+            &nbsp;|&nbsp;
+            <Link to="/users">Bot users</Link>
             <div className="card o-hidden border-0 shadow-lg my-5">
                 <div className="card-body p-0">
                     {/* <!-- Nested Row within Card Body --> */}
@@ -122,8 +165,13 @@ function Invoice() {
                                 <form className="user" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="form-group row">
                                         <div className="col-sm-12">
-                                            <input type="text" className="form-control form-control-user" id="botuser"
-                                                placeholder="User" {...register("user")} />
+                                            {/* <input type="text" className="form-control form-control-user" id="botuser"
+                                                placeholder="User" {...register("user")} /> */}
+                                            <sup>* wait for few seconds for list of users to appear</sup>
+                                            <select className="form-control form-control-user form-select" id="botuser" {...register("user")}>
+                                                <option>-----------Select user-----------</option>
+                                                {userData}
+                                            </select>
                                         </div>
                                     </div>
 
