@@ -160,7 +160,7 @@ function Invoice() {
                         <div className="col-lg-12">
                             <div className="p-5">
                                 <div className="text-center">
-                                    <h1 className="h4 text-gray-900 mb-4">Create E-Invoice</h1>
+                                    <h1 className="h4 text-gray-900 mb-4">Create e-reciept</h1>
                                 </div>
                                 <form className="user" onSubmit={handleSubmit(onSubmit)}>
                                     <div className="form-group row">
